@@ -1,12 +1,11 @@
 import StudentList from './components/StudentList';
+import StudentContextProvider from './context/StudentContext';
 function App() {
   return (
-    <div className="container-xl">
-      <div className="table-responsive">
-        <div className="table-wrapper">
-          <StudentList />
-        </div>
-      </div>
+    <div className="container">
+      <StudentContextProvider>
+        <StudentList />
+      </StudentContextProvider>
     </div>
   );
 }

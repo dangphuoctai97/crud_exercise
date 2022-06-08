@@ -1,44 +1,77 @@
 import Student from './Student';
+import { useContext, useEffect, useState } from 'react';
+import { StudentContext } from '../context/StudentContext';
+import {
+  Table,
+  Container,
+  Navbar,
+  Button,
+  Modal,
+  ModalHeader,
+  ModalTitle,
+  ModalBody,
+  CloseButton,
+} from 'react-bootstrap';
+import AddForm from './AddForm';
 
 const StudentList = () => {
+  const { students } = useContext(StudentContext);
+
+  const [showAddForm, setShowAddForm] = useState(false);
+
+  const handleShowAddForm = () => setShowAddForm(true);
+
+  const handleCloseAddForm = () => setShowAddForm(false);
+
+  useEffect(() => {
+    handleCloseAddForm();
+  }, []);
   return (
     <>
-      <div className="table-title">
-        <div className="row">
-          <div className="col-sm-6">
-            <h2>
-              Manage <b>Student</b>
-            </h2>
-          </div>
-          <div className="col-sm-6">
-            <a
-              href="#addStudentMdal"
-              className="btn btn-success"
-              data-toggle="modal"
-            >
-              <i className="material-icons">&#xe147;</i>
-              <span>Add new student</span>
-            </a>
-          </div>
-        </div>
-      </div>
+      <Navbar bg="dark" expand="lg">
+        <Container>
+          <Navbar.Brand href="#home">
+            <h1 className="title">Quản lý sinh viên</h1>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav"></Navbar.Collapse>
 
-      <table className="table table-striped table-hover">
+          <Button onClick={handleShowAddForm} variant="outline-success">
+            Add new student
+          </Button>
+        </Container>
+      </Navbar>
+
+      <Table striped bordered hover>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Address</th>
-            <th>Phone</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Age</th>
+            <th>Class</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <Student />
-          </tr>
+          {students.map((student) => (
+            <tr key={student.id}>
+              <Student student={student} />
+            </tr>
+          ))}
         </tbody>
-      </table>
+      </Table>
+
+      <Modal show={showAddForm}>
+        <ModalHeader>
+          <ModalTitle>Add student</ModalTitle>
+
+          <CloseButton onClick={handleCloseAddForm} />
+        </ModalHeader>
+
+        <ModalBody>
+          <AddForm />
+        </ModalBody>
+      </Modal>
     </>
   );
 };
