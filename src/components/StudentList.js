@@ -11,6 +11,7 @@ import {
   ModalTitle,
   ModalBody,
   CloseButton,
+  Alert,
 } from 'react-bootstrap';
 import AddForm from './AddForm';
 
@@ -19,13 +20,26 @@ const StudentList = () => {
 
   const [showAddForm, setShowAddForm] = useState(false);
 
+  const [showAlert, setShowAlert] = useState(false);
+
+  const handleShowAlert = () => {
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 2000);
+  };
+
   const handleShowAddForm = () => setShowAddForm(true);
 
   const handleCloseAddForm = () => setShowAddForm(false);
 
   useEffect(() => {
     handleCloseAddForm();
-  }, []);
+    return () => {
+      handleShowAlert();
+    };
+  }, [students]);
+
   return (
     <>
       <Navbar bg="dark" expand="lg">
@@ -41,6 +55,15 @@ const StudentList = () => {
           </Button>
         </Container>
       </Navbar>
+
+      <Alert
+        show={showAlert}
+        variant="success"
+        onClose={() => setShowAlert(false)}
+        dismissible
+      >
+        Student List Updated Successfully
+      </Alert>
 
       <Table striped bordered hover>
         <thead>
